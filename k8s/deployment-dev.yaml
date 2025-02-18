@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-dev
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: my-app
+        env: dev
+    spec:
+      containers:
+      - name: my-app
+        image: ghcr.io/username/my-app:${{ github.sha }}
+        ports:
+        - containerPort: 80
