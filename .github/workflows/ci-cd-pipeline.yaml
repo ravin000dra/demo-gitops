@@ -38,7 +38,10 @@ jobs:
       name: dev
     steps:
       - name: Set up Kubernetes Kubeconfig
-        run: echo "${{ secrets.KUBE_CONFIG_DEV }}" > $HOME/.kube/config
+        run: |
+          mkdir -p $HOME/.kube  # ✅ Ensure the directory exists
+          echo "${{ secrets.KUBE_CONFIG_DEV }}" > $HOME/.kube/config  # ✅ Write config file
+          chmod 600 $HOME/.kube/config  # ✅ Secure the file
 
       - name: Deploy to Dev environment
         run: |
