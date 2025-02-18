@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write  # ✅ Moved permissions to the correct place
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,16 +23,13 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}         # Use the GitHub user name
-          password: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}  # ✅ Use a PAT instead of GITHUB_TOKEN
 
-      - name: Build Docker Image
+      - name: Build and Push Docker Image
         run: |
-          docker build -t ghcr.io/ravin000dra/demo-gitops:${{ github.sha }} .
-
-      - name: Push Docker Image
-        run: |
-          docker push ghcr.io/ravin000dra/demo-gitops:${{ github.sha }}
+          docker buildx build --push \
+            --tag ghcr.io/ravin000dra/demo-gitops:${{ github.sha }} .
 
   deploy-dev:
     needs: build
