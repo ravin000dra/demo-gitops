@@ -24,11 +24,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/username/demo-gitops:${{ github.sha }} .
+          docker build -t ghcr.io/username/DEMO-GITOPS:${{ github.sha }} .
 
       - name: Push Docker Image
         run: |
-          docker push ghcr.io/username/demo-gitops:${{ github.sha }}
+          docker push ghcr.io/username/DEMO-GITOPS:${{ github.sha }}
 
   deploy-dev:
     needs: build
